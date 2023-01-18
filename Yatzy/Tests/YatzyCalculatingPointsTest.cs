@@ -29,5 +29,17 @@ namespace Yatzy.Tests
 			Assert.Equal(expected, result);
 		}
 
+		[Theory]
+		[InlineData(3, 3, 4, 4, 4, 12)]
+		[InlineData(5, 2, 2, 2, 5, 6)]
+		[InlineData(1, 1, 1, 6, 6, 3)]
+		[InlineData(6, 6, 2, 2, 5, 0)]
+		public void TrissTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.Triss(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
+
 	}
 }
