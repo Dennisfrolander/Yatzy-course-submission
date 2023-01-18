@@ -60,6 +60,18 @@ namespace Yatzy.Tests
 			var result = calculator.kåk(valueA, valueB, valueC, valueD, valueF);
 			Assert.Equal(expected, result);
 		}
-
+		[Theory]
+		[InlineData(1, 1, 1, 2, 2, 6)]
+		[InlineData(6, 2, 2, 2, 6, 16)]
+		[InlineData(2, 2, 2, 2, 2, 8)]
+		[InlineData(1, 2, 6, 3, 6, 0)]
+		[InlineData(4, 3, 3, 4, 4, 14)]
+		[InlineData(4, 4, 4, 5, 4, 16)]
+		public void tvåparTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.tvåpar(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
 	}
 }

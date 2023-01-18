@@ -154,5 +154,67 @@
 			}
 			return points;
 		}
+		public int tvåpar(int v1, int v2, int v3, int v4, int v5)
+		{
+			int[] array = { v1, v2, v3, v4, v5 };
+			int firstPairValue = 0;
+			int secondPairValue = 0;
+			int totSum = 0;
+			bool pairCheck = false;
+			for (int i = 0; i < 5; i++)
+			{
+				int diceCount = 0;
+				for (int j = 0; j < 5; j++)
+				{
+					if (array[i] == array[j])
+					{
+						diceCount++;
+
+					}
+				}
+				if (diceCount == 2)
+				{
+					firstPairValue = array[i];
+					pairCheck = true;
+				}
+				else if (diceCount == 3)
+				{
+					firstPairValue = array[i];
+					pairCheck = true;
+				}
+				else if (diceCount >= 4)
+				{
+					totSum = array[i] * 4;
+					break;
+				}
+			}
+			if (pairCheck)
+			{
+				for (int i = 0; i < 5; i++)
+				{
+					int diceCount = 0;
+					for (int j = 0; j < 5; j++)
+					{
+						if (array[i] == array[j] && array[i] != firstPairValue)
+						{
+							diceCount++;
+						}
+					}
+					if (diceCount == 2)
+					{
+						secondPairValue = array[i];
+						totSum = firstPairValue + secondPairValue;
+						totSum *= 2;
+					}
+					else if (diceCount == 3)
+					{
+						secondPairValue = array[i];
+						totSum = firstPairValue + secondPairValue;
+						totSum *= 2;
+					}
+				}
+			}
+			return totSum;
+		}
 	}
 }
