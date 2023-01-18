@@ -61,5 +61,30 @@
 				return 0;
 			}
 		}
+
+		public int Triss(int v1, int v2, int v3, int v4, int v5)
+		{
+			int[] array = { v1, v2, v3, v4, v5 };
+			int test = 0;
+			for (int j = 0; j < 5; j++)
+			{
+				int diceCount = 0;
+				for (int k = 0; k < 5; k++)
+				{
+					if (array[j] == array[k])
+					{
+						diceCount++;
+
+					}
+					if (diceCount == 3)
+					{
+						test = array[j] * 3;
+						break;
+					}
+				}
+
+			}
+			return test;
+		}
 	}
 }
