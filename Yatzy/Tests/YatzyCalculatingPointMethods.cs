@@ -86,5 +86,27 @@
 			}
 			return test;
 		}
+		public int fyrtal(int v1, int v2, int v3, int v4, int v5)
+		{
+			int resultat = 0;
+			int[] array = { v1, v2, v3, v4, v5 };
+			for (int i = 0; i < 5; i++)
+			{
+				int diceCount = 0;
+				for (int j = 0; j < 5; j++)
+				{
+					if (array[i] == array[j])
+					{
+						diceCount++;
+					}
+					if (diceCount == 4)
+					{
+						resultat = array[j] * 4;
+						break;
+					}
+				}
+			}
+			return resultat;
+		}
 	}
 }

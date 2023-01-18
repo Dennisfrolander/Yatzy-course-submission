@@ -40,6 +40,16 @@ namespace Yatzy.Tests
 			var result = calculator.Triss(valueA, valueB, valueC, valueD, valueF);
 			Assert.Equal(expected, result);
 		}
+		[Theory]
+		[InlineData(1, 1, 1, 1, 1, 4)]
+		[InlineData(3, 2, 3, 3, 6, 0)]
+		[InlineData(6, 6, 6, 6, 3, 24)]
+		public void fyrtalTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.fyrtal(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
 
 	}
 }
