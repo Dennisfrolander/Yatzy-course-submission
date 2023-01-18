@@ -50,6 +50,16 @@ namespace Yatzy.Tests
 			var result = calculator.fyrtal(valueA, valueB, valueC, valueD, valueF);
 			Assert.Equal(expected, result);
 		}
+		[Theory]
+		[InlineData(1, 1, 1, 1, 1, 0)]
+		[InlineData(2, 6, 3, 3, 6, 0)]
+		[InlineData(1, 1, 1, 2, 2, 7)]
+		public void kåkTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.kåk(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
 
 	}
 }
