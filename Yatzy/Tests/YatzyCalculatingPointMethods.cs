@@ -108,5 +108,51 @@
 			}
 			return resultat;
 		}
+		public int kåk(int v1, int v2, int v3, int v4, int v5)
+		{
+			int[] array = { v1, v2, v3, v4, v5 };
+			bool fullHouse = false;
+			int fullHouseValue = 0;
+			int points = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				int diceCount = 0;
+				for (int j = 0; j < 5; j++)
+				{
+					if (array[i] == array[j])
+					{
+						diceCount++;
+					}
+					if (diceCount == 3)
+					{
+						fullHouseValue = array[i];
+						fullHouse = true;
+						break;
+					}
+				}
+			}
+			if (fullHouse)
+			{
+				for (int i = 0; i < 5; i++)
+				{
+					int diceCount = 0;
+					for (int j = 0; j < 5; j++)
+					{
+						if (array[i] == array[j] && array[i] != fullHouseValue)
+						{
+							diceCount++;
+						}
+					}
+					if (diceCount == 2)
+					{
+						fullHouseValue *= 3;
+						fullHouseValue += (array[i] * 2);
+						points = fullHouseValue;
+						break;
+					}
+				}
+			}
+			return points;
+		}
 	}
 }
