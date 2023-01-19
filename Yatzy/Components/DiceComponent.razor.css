@@ -1,0 +1,9 @@
+﻿.dicecontainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.img-button-dice {
+    border-radius: 15%;
+}
