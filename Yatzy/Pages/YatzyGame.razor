@@ -2,23 +2,92 @@
 @using Yatzy.Models
 <h3>Yatzy</h3>
 
-<Yatzy.Components.HeroTitle Title="Create Player" />
-<p class="inputerrormessage">@inputErrorMessageAddPlayer</p>
-<input @bind="firstName" class="form-control w-25" placeholder="Förnamn" />
-<input @bind="lastName" class="form-control w-25" placeholder="Efternamn" />
-<button type="button" class="btn btn-dark my-3" @onclick="AddPlayer">Add Player</button>
-<button type="button" class="btn btn-dark my-3 text" @onclick="RemovePlayer">Remove Player</button>
-<p>@errorMessageIfWrongPlayer</p>
+<div class="d-flex justify-content-center">
+	<button class="btn btn-dark" @onclick="() =>StartGame()">@startOrQuitGame</button>
+</div>
 
-<Yatzy.Components.DiceComponent />
+
+@if (Createplayers)
+{
+	<section>
+		<Yatzy.Components.HeroTitle Title="Create Player" />
+		<p class="inputErrorMessageAddPlayer">@inputErrorMessageAddPlayer</p>
+		<input @bind="firstName" class="form-control w-25" placeholder="Förnamn" />
+		<input @bind="lastName" class="form-control w-25" placeholder="Efternamn" />
+		<button type="button" class="btn btn-dark my-3" @onclick="AddPlayer">Add Player</button>
+		<button type="button" class="btn btn-dark my-3 text" @onclick="RemovePlayer">Remove Player</button>
+		<p>@errorMessageIfWrongPlayer</p>
+	</section>
+}
+else
+{
+	<section>
+		<Yatzy.Components.DiceComponent />
+	</section>
+}
+
+
+<section>
+	<Yatzy.Components.HeroTitle Title="Scoreboard" />
+	@if (listOfAddedPlayers.Count > 0)
+	{
+		<div class="container scoreboard-list-container">
+			<div class="row">
+				<div class="col p-0">
+					<p class="scoreboard-list scoreboard-list-players scoreboard-list-background">Players:</p>
+					@foreach (var poäng in Player.ScoreBoardPoints)
+					{
+						if (poäng == "Summa")
+						{
+							<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@poäng:</p>
+						}
+						else if (poäng == "Total summa")
+						{
+							<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@poäng:</p>
+						}
+						else
+						{
+							<p class="scoreboard-list scoreboard-list-points">@poäng:</p>
+						}
+					}
+				</div>
+				@foreach (Player player in listOfAddedPlayers)
+				{
+					<div class="col p-0">
+						<p class="scoreboard-list scoreboard-list-players">@player.FirstName @player.LastName[0]</p>
+
+						@foreach (var score in player.playerScore)
+						{
+							if (score.Item1 == -1)
+							{
+								<p class="scoreboard-list scoreboard-list-struken text-center">X</p>
+							}
+							else
+							{
+								<p class="scoreboard-list">@score.Item1</p>
+							}
+						}
+					</div>
+				}
+			</div>
+		</div>
+	}
+	else
+	{
+		<p>You have to create players before you can see the scoreboard</p>
+	}
+</section>
 
 @code {
 	string inputErrorMessageAddPlayer = "";
 	string firstName = "";
 	string lastName = "";
 	string errorMessageIfWrongPlayer = "";
+	string startOrQuitGame = "Start Game";
 
 	List<Player> listOfAddedPlayers = new();
+
+	bool Createplayers = true;
 
 	public void AddPlayer()
 	{
@@ -53,5 +122,17 @@
 			}
 		}
 	}
-
+	public void StartGame()
+	{
+		if (Createplayers)
+		{
+			Createplayers = false;
+			startOrQuitGame = "Quit Game";
+		}
+		else
+		{
+			Createplayers = true;
+			startOrQuitGame = "Start Game";
+		}
+	}
 }

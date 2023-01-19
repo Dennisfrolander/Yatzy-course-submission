@@ -4,22 +4,36 @@
 	{
 		public string FirstName { get; set; } = "";
 		public string LastName { get; set; } = "";
-
-		public static int NumberOfPlayers = 0;
-		public string NewPlayer { get; }
-
-
 		public int AntalKast { get; set; }
-
 		public List<dynamic> playerScore { get; set; }
 
+		private static readonly List<string> list = new()
+		{
+			"Ettor",
+			"Tvåor",
+			"Treor",
+			"Fyror",
+			"Femmor",
+			"Sexor",
+			"Bonus(63)",
+			"Summa",
+			"1 par",
+			"2 par",
+			"Triss",
+			"Fyrtal",
+			"Liten stege",
+			"Stor stege",
+			"Kåk",
+			"Chans",
+			"YATZY",
+			"Total summa",
+		};
 
+		public static List<string> ScoreBoardPoints = list;
 		public Player(string firstName, string lastName)
 		{
 			FirstName = firstName;
 			LastName = lastName;
-			NewPlayer = NumberOfPlayers.ToString();
-			NumberOfPlayers++;
 			AntalKast = 3;
 			playerScore = new List<dynamic>()
 			{
@@ -45,4 +59,5 @@
 
 		}
 	}
+
 }

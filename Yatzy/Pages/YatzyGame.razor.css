@@ -1,0 +1,48 @@
+﻿table, th, td {
+    border: 1px solid black;
+}
+
+table {
+    width: 100%;
+}
+
+.inputErrorMessageAddPlayer {
+    color: red;
+}
+
+.scoreboardSumma {
+    background: lightgrey;
+    font-weight: 900;
+}
+
+#scoreboardplayers {
+    background: lightgrey;
+}
+
+.dicecontainer {
+    display: flex;
+}
+
+.img-button-dice {
+    border-radius: 15%;
+}
+
+.scoreboard-list {
+    border: 0.5px solid grey;
+    margin: 0;
+    padding: 8px;
+}
+
+.scoreboard-list-points {
+    font-weight: 600;
+}
+
+.scoreboard-list-players {
+    font-weight: 600;
+}
+
+.scoreboard-list-background {
+    background: lightgrey;
+    font-style: italic;
+    font-weight: 900;
+}
