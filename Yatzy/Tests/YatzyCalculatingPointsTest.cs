@@ -73,5 +73,43 @@ namespace Yatzy.Tests
 			var result = calculator.tvåpar(valueA, valueB, valueC, valueD, valueF);
 			Assert.Equal(expected, result);
 		}
+		[Theory]
+		[InlineData(1, 3, 5, 2, 4, 15)]
+		[InlineData(2, 6, 3, 3, 6, 0)]
+		[InlineData(1, 2, 3, 5, 4, 15)]
+		[InlineData(1, 2, 3, 6, 4, 0)]
+		[InlineData(6, 5, 4, 3, 2, 0)]
+		public void litenStegeTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.litenStege(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
+		[Theory]
+		[InlineData(6, 3, 5, 2, 4, 20)]
+		[InlineData(2, 6, 3, 3, 6, 0)]
+		[InlineData(6, 2, 3, 5, 4, 20)]
+		[InlineData(1, 2, 3, 6, 4, 0)]
+		[InlineData(6, 5, 4, 3, 2, 20)]
+		[InlineData(1, 5, 4, 3, 2, 0)]
+		public void storStegeTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.storStege(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
+		[Theory]
+		[InlineData(3, 3, 3, 3, 2, 0)]
+		[InlineData(2, 2, 2, 2, 2, 50)]
+		[InlineData(6, 6, 6, 5, 6, 0)]
+		[InlineData(1, 2, 3, 6, 4, 0)]
+		[InlineData(6, 6, 6, 6, 6, 50)]
+		[InlineData(1, 2, 2, 2, 2, 0)]
+		public void YatzyTest(int valueA, int valueB, int valueC, int valueD, int valueF, int expected)
+		{
+			var calculator = new YatzyCalculatingPointMethods();
+			var result = calculator.yatzy(valueA, valueB, valueC, valueD, valueF);
+			Assert.Equal(expected, result);
+		}
 	}
 }
