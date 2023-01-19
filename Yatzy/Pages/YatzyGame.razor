@@ -2,7 +2,7 @@
 @using Yatzy.Models
 <h3>Yatzy</h3>
 
-<h2>Create players</h2>
+<Yatzy.Components.HeroTitle Title="Create Player" />
 <p class="inputerrormessage">@inputErrorMessageAddPlayer</p>
 <input @bind="firstName" class="form-control w-25" placeholder="Förnamn" />
 <input @bind="lastName" class="form-control w-25" placeholder="Efternamn" />
@@ -10,11 +10,7 @@
 <button type="button" class="btn btn-dark my-3 text" @onclick="RemovePlayer">Remove Player</button>
 <p>@errorMessageIfWrongPlayer</p>
 
-@foreach (Player player in listOfAddedPlayers)
-{
-	<p>@player.FirstName</p>
-}
-
+<Yatzy.Components.DiceComponent />
 
 @code {
 	string inputErrorMessageAddPlayer = "";
