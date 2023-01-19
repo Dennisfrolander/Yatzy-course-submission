@@ -216,5 +216,71 @@
 			}
 			return totSum;
 		}
+		public int litenStege(int v1, int v2, int v3, int v4, int v5)
+		{
+			int point = 0;
+			int[] array = { v1, v2, v3, v4, v5 };
+			for (int i = 0; i < 5; i++)
+			{
+
+				if (!pairChecker.Contains(array[i]))
+				{
+					pairChecker.Add(array[i]);
+					point += array[i];
+				}
+			}
+			if (point == 15 && pairChecker.Count == 5)
+			{
+				return point;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		public int storStege(int v1, int v2, int v3, int v4, int v5)
+		{
+			int point = 0;
+			int[] array = { v1, v2, v3, v4, v5 };
+			for (int i = 0; i < 5; i++)
+			{
+
+				if (!pairChecker.Contains(array[i]))
+				{
+					pairChecker.Add(array[i]);
+					point += array[i];
+				}
+			}
+			if (point == 20 && pairChecker.Count == 5)
+			{
+				return point;
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		public int yatzy(int v1, int v2, int v3, int v4, int v5)
+		{
+			int point = 0;
+			int[] array = { v1, v2, v3, v4, v5 };
+			for (int i = 0; i < 5; i++)
+			{
+				int counter = 0;
+				for (int k = 0; k < 5; k++)
+				{
+
+					if (array[i] == array[k])
+					{
+						counter++;
+					}
+				}
+				if (counter == 5)
+				{
+					point = 50;
+				}
+			}
+			return point;
+		}
 	}
 }
