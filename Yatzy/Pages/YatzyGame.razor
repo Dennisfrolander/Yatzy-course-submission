@@ -1,0 +1,61 @@
+﻿@page "/yatzy"
+@using Yatzy.Models
+<h3>Yatzy</h3>
+
+<h2>Create players</h2>
+<p class="inputerrormessage">@inputErrorMessageAddPlayer</p>
+<input @bind="firstName" class="form-control w-25" placeholder="Förnamn" />
+<input @bind="lastName" class="form-control w-25" placeholder="Efternamn" />
+<button type="button" class="btn btn-dark my-3" @onclick="AddPlayer">Add Player</button>
+<button type="button" class="btn btn-dark my-3 text" @onclick="RemovePlayer">Remove Player</button>
+<p>@errorMessageIfWrongPlayer</p>
+
+@foreach (Player player in listOfAddedPlayers)
+{
+	<p>@player.FirstName</p>
+}
+
+
+@code {
+	string inputErrorMessageAddPlayer = "";
+	string firstName = "";
+	string lastName = "";
+	string errorMessageIfWrongPlayer = "";
+
+	List<Player> listOfAddedPlayers = new();
+
+	public void AddPlayer()
+	{
+		if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+		{
+			listOfAddedPlayers.Add(new Player(firstName, lastName));
+			firstName = "";
+			lastName = "";
+			inputErrorMessageAddPlayer = "";
+		}
+		else
+		{
+			inputErrorMessageAddPlayer = "Invalid first / last name, try again.";
+		}
+	}
+
+	public void RemovePlayer()
+	{
+		var playersCopy = listOfAddedPlayers.ToList();
+
+		foreach (var player in playersCopy)
+		{
+
+			if (player.FirstName == firstName && player.LastName == lastName)
+			{
+				errorMessageIfWrongPlayer = $"Player {player.FirstName} {player.LastName} has been removed from scoreboard";
+				listOfAddedPlayers.Remove(player);
+			}
+			else
+			{
+				errorMessageIfWrongPlayer = $"Player does not exist";
+			}
+		}
+	}
+
+}
