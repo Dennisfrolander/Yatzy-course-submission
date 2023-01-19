@@ -1,5 +1,6 @@
 ﻿@page "/yatzy"
 @using Yatzy.Models
+@using YatziMethods
 <h3>Yatzy</h3>
 
 <div class="d-flex justify-content-center">
@@ -35,19 +36,19 @@ else
 			<div class="row">
 				<div class="col p-0">
 					<p class="scoreboard-list scoreboard-list-players scoreboard-list-background">Players:</p>
-					@foreach (var poäng in Player.ScoreBoardPoints)
+					@foreach (var pointName in Player.ScoreBoardPoints)
 					{
-						if (poäng == "Summa")
+						if (pointName == "Summa")
 						{
-							<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@poäng:</p>
+							<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@pointName:</p>
 						}
-						else if (poäng == "Total summa")
+						else if (pointName == "Total summa")
 						{
-							<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@poäng:</p>
+							<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@pointName:</p>
 						}
 						else
 						{
-							<p class="scoreboard-list scoreboard-list-points">@poäng:</p>
+							<p class="scoreboard-list scoreboard-list-points">@pointName:</p>
 						}
 					}
 				</div>
@@ -77,6 +78,23 @@ else
 		<p>You have to create players before you can see the scoreboard</p>
 	}
 </section>
+<button @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
+<div>
+
+		@foreach (Protokoll item in protokoll)
+		{
+			if (item.Check)
+			{
+				<div class="d-flex justify-content-center">
+					<span>@item.Points</span>
+					<input @bind=item.Submit type="checkbox" name="val" />
+					<label>@item.Choice</label>
+				</div>
+			}
+		}
+		<div class="d-flex justify-content-evenly m-3">
+		</div>
+</div>
 
 @code {
 	string inputErrorMessageAddPlayer = "";
@@ -84,11 +102,19 @@ else
 	string lastName = "";
 	string errorMessageIfWrongPlayer = "";
 	string startOrQuitGame = "Start Game";
-
+	List<Protokoll> protokoll = new();
 	List<Player> listOfAddedPlayers = new();
-
+	List<int> SavedDiceList = SavedDice.SavedDiceList;
+	List<int> listOfNumber = new();
 	bool Createplayers = true;
-
+	int indexOfCurrentPlayer = 0;
+	public void ShowScoreboardChoice()
+	{
+		var ShowScoreboardChoice = new CalculatingPoints();
+		ShowScoreboardChoice.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+		ShowScoreboardChoice.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+		SavedDiceList.Clear();
+	}
 	public void AddPlayer()
 	{
 		if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
