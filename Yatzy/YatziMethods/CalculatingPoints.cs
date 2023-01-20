@@ -26,13 +26,17 @@ namespace Yatzy.YatziMethods
 					}
 				}
 				int index = listOfNumber[i];
-				if (counter > 0 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index - 1].Item1 == 0)
+				if (counter > 0)
 				{
 					listOfNumber[i] *= counter;
 					index = listOfNumber[i] / counter;
 
 				}
-				protokoll.Add(new Protokoll(listOfNumber[i], scoreboardPointName[index - 1], true, false));
+				if(listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index - 1].Item1 == 0)
+				{
+					protokoll.Add(new Protokoll(listOfNumber[i], scoreboardPointName[index - 1], true, false));
+				}
+				
 			}
 			listOfNumber.Clear();
 		}
