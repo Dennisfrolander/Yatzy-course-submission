@@ -254,5 +254,27 @@ namespace Yatzy.YatziMethods
 				protokoll.Add(new Protokoll(points, "Chans", true, false));
 			}
 		}
+
+		public void Yatzy(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
+		{
+
+			for (int i = 0; i < 5; i++)
+			{
+				int counter = 0;
+				for (int j = 0; j < 5; j++)
+				{
+
+					if (savedDiceList[i] == savedDiceList[j])
+					{
+						counter++;
+					}
+				}
+				if (counter == 5 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[16].Item1 == 0)
+				{
+					protokoll.Add(new Protokoll(50, "YATZY", true, false));
+					break;
+				}
+			}
+		}
 	}
 }
