@@ -180,6 +180,24 @@ namespace Yatzy.YatziMethods
 		}
 
 
+		public void StorStege(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll, List<int> listOfNumber)
+		{
+			int points = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				if (!listOfNumber.Contains(savedDiceList[i]))
+				{
+					listOfNumber.Add(savedDiceList[i]);
+					points += savedDiceList[i];
+				}
+			}
+			if (points == 20 && listOfNumber.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[13].Item1 == 0)
+			{
+				protokoll.Add(new Protokoll(points, "Stor stege", true, false));
+			}
+			listOfNumber.Clear();
+		}
+
 
 
 
