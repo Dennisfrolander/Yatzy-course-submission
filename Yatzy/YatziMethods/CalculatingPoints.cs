@@ -160,5 +160,49 @@ namespace Yatzy.YatziMethods
 				}
 			}
 		}
+
+		public void Kåk(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
+		{
+			bool fullHouse = false;
+			int fullHouseValue = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				int diceCount = 0;
+				for (int j = 0; j < 5; j++)
+				{
+					if (savedDiceList[i] == savedDiceList[j])
+					{
+						diceCount++;
+					}
+					if (diceCount == 3)
+					{
+						fullHouseValue = savedDiceList[i];
+						fullHouse = true;
+						break;
+					}
+				}
+			}
+			if (fullHouse)
+			{
+				for (int i = 0; i < 5; i++)
+				{
+					int diceCount = 0;
+					for (int j = 0; j < 5; j++)
+					{
+						if (savedDiceList[i] == savedDiceList[j] && savedDiceList[i] != fullHouseValue)
+						{
+							diceCount++;
+						}
+					}
+					if (diceCount == 2 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[14].Item1 == 0)
+					{
+						fullHouseValue *= 3;
+						fullHouseValue += (savedDiceList[i] * 2);
+						protokoll.Add(new Protokoll(fullHouseValue, "Kåk", true, false));
+						break;
+					}
+				}
+			}
+		}
 	}
 }
