@@ -161,6 +161,31 @@ namespace Yatzy.YatziMethods
 			}
 		}
 
+		public void LitenStege(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll, List<int> listOfNumber)
+		{
+			int points = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				if (!listOfNumber.Contains(savedDiceList[i]))
+				{
+					listOfNumber.Add(savedDiceList[i]);
+					points += savedDiceList[i];
+				}
+			}
+			if (points == 15 && listOfNumber.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[12].Item1 == 0)
+			{
+				protokoll.Add(new Protokoll(points, "Liten stege", true, false));
+			}
+			listOfNumber.Clear();
+		}
+
+
+
+
+
+
+
+
 		public void Kåk(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			bool fullHouse = false;
