@@ -27,6 +27,23 @@ else
 	</section>
 }
 
+<div>
+
+	@foreach (Protokoll item in protokoll)
+	{
+		if (item.Check)
+		{
+			<div class="d-flex justify-content-center">
+				<span>@item.Points</span>
+				<input @bind=item.Submit type="checkbox" name="val" />
+				<label>@item.Choice</label>
+			</div>
+		}
+	}
+	<div class="d-flex justify-content-evenly m-3">
+	</div>
+</div>
+<button @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
 
 <section>
 	<Yatzy.Components.HeroTitle Title="Scoreboard" />
@@ -78,23 +95,7 @@ else
 		<p>You have to create players before you can see the scoreboard</p>
 	}
 </section>
-<button @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
-<div>
 
-		@foreach (Protokoll item in protokoll)
-		{
-			if (item.Check)
-			{
-				<div class="d-flex justify-content-center">
-					<span>@item.Points</span>
-					<input @bind=item.Submit type="checkbox" name="val" />
-					<label>@item.Choice</label>
-				</div>
-			}
-		}
-		<div class="d-flex justify-content-evenly m-3">
-		</div>
-</div>
 
 @code {
 	string inputErrorMessageAddPlayer = "";
@@ -113,16 +114,19 @@ else
 	bool Createplayers = true;
 
 
-	int indexOfCurrentPlayer = 0
+	int indexOfCurrentPlayer = 0;
 
 
 	public void ShowScoreboardChoice()
 	{
-		var ShowScoreboardChoice = new CalculatingPoints();
-		ShowScoreboardChoice.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
-		ShowScoreboardChoice.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+		var YatzyCalculator = new CalculatingPoints();
+		YatzyCalculator.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+		YatzyCalculator.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+		YatzyCalculator.TvåPar(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+
 		SavedDiceList.Clear();
 	}
+
 	public void AddPlayer()
 	{
 		if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
@@ -156,6 +160,7 @@ else
 			}
 		}
 	}
+
 	public void StartGame()
 	{
 		if (Createplayers)
