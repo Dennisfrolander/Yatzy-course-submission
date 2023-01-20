@@ -198,12 +198,6 @@ namespace Yatzy.YatziMethods
 			listOfNumber.Clear();
 		}
 
-
-
-
-
-
-
 		public void Kåk(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			bool fullHouse = false;
@@ -245,6 +239,19 @@ namespace Yatzy.YatziMethods
 						break;
 					}
 				}
+			}
+		}
+
+		public void Chans(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
+		{
+			int points = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				points += savedDiceList[i];
+			}
+			if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[15].Item1 == 0)
+			{
+				protokoll.Add(new Protokoll(points, "Chans", true, false));
 			}
 		}
 	}
