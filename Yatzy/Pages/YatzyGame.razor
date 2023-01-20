@@ -34,7 +34,7 @@ else
 		<DiceComponent />
 	</section>
 	<div class="d-flex justify-content-center">
-		<div >
+		<div>
 			@if (protokoll.Count > 0)
 			{
 				<div class="d-flex justify-content-center m-5">
@@ -150,15 +150,39 @@ else
 
 	public void AddXToScoreboard()
 	{
-		int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, XtoScoreBoard));
-		if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index].Item1 == 0)
+		try
 		{
-			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (-1, XtoScoreBoard);
-			ClearNGotoNextPlayer();
-			XtoScoreBoard = "";
+			int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, (char.ToUpper(XtoScoreBoard[0]) + XtoScoreBoard.Substring(1))));
+			if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index].Item1 == 0)
+			{
+				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (-1, XtoScoreBoard);
+				ClearNGotoNextPlayer();
+				XtoScoreBoard = "";
+			}
+		}
+		catch
+		{
+
 		}
 	}
 
+	public void bonusCounter()
+	{
+		int bonusPoints = 0;
+		for (int i = 0; i < 6; i++)
+		{
+			if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[i].Item1 != 0)
+			{
+				bonusPoints += listOfAddedPlayers[indexOfCurrentPlayer].playerScore[i].Item1;
+			}
+		}
+		if (bonusPoints >= 63 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item1 == 0)
+		{
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item1 = 50;
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item1 += 50;
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item1 += 50;
+		}
+	}
 	public void AddToScoreList()
 	{
 		foreach (Protokoll item in protokoll)
@@ -172,15 +196,17 @@ else
 				currentStateOfTotalSumma = (currentStateOfTotalSumma.Item1 + item.Points, currentStateOfTotalSumma.Item2);
 				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = currentStateOfTotalSumma;
 
-				if (item.Choice == "Ettor" || item.Choice == "Tvåor" || item.Choice == "Treor" || item.Choice == "Fyror" || item.Choice == "Femmor" || item.Choice == "Sexor")
+				if (item.Choice == "Ettor" || item.Choice == "TvÃ¥or" || item.Choice == "Treor" || item.Choice == "Fyror" || item.Choice == "Femmor" || item.Choice == "Sexor")
 				{
 					var currentStateOfSumma = listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7];
 					currentStateOfSumma = (currentStateOfSumma.Item1 + item.Points, currentStateOfSumma.Item2);
 					listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7] = currentStateOfSumma;
+
 				}
 			}
 		}
 		ClearNGotoNextPlayer();
+		bonusCounter();
 	}
 
 	public void ClearNGotoNextPlayer()
