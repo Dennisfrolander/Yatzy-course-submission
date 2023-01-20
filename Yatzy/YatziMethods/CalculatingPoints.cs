@@ -140,5 +140,25 @@ namespace Yatzy.YatziMethods
 				}
 			}
 		}
+
+		public void Fyrtal(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				int diceCount = 0;
+				for (int j = 0; j < 5; j++)
+				{
+					if (savedDiceList[i] == savedDiceList[j])
+					{
+						diceCount++;
+					}
+				}
+				if (diceCount >= 4 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[11].Item1 == 0)
+				{
+					protokoll.Add(new Protokoll(savedDiceList[i] * 4, "Fyrtal", true, false));
+					break;
+				}
+			}
+		}
 	}
 }
