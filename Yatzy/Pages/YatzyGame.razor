@@ -27,39 +27,33 @@
 }
 else
 {
-	<div>
-		<h4 class="m-5 text-center">Spelare: @listOfAddedPlayers[indexOfCurrentPlayer].FirstName @listOfAddedPlayers[indexOfCurrentPlayer].LastName</h4>
-	</div>
-	<section>
-		<DiceComponent />
-	</section>
-	<div class="d-flex justify-content-center">
-		<div>
-			@if (protokoll.Count > 0)
-			{
-				<div class="d-flex justify-content-center m-5">
-					<button class="btn btn-dark" @onclick="AddToScoreList">Add to Scoreboard</button>
+	<div class="container game-container">
+		<div class="row">
+			<div class="col-lg-2 col-md-12 col-sm-8">
+				<div class="d-flex justify-content-center m-3">
+					<button class="btn btn-dark" @onclick="ShowScoreboardChoice">Alternatives</button>
 				</div>
-				foreach (Protokoll item in protokoll)
+				@if (protokoll.Count > 0 && showChoiceBool)
 				{
-					if (item.Check)
+					foreach (Protokoll item in protokoll)
 					{
-						<div class="d-flex justify-content-center">
-							<span>@item.Points</span>
-							<input @bind=item.Submit type="checkbox" name="val" />
-							<label>@item.Choice</label>
-						</div>
+						if (item.Check)
+						{
+							<div class="scoreBoardChoiceButton" @onclick="(() =>SaveScore(item))">
+								<p class="scoreBoardChoiceButton-paragraph">@item.Choice</p>
+								<p class="scoreBoardChoiceButton-paragraph">@item.Points p</p>
+							</div>
+						}
 					}
 				}
-			}
-			<div class="d-flex justify-content-evenly m-3">
-				<button class="btn btn-dark" @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
 			</div>
-			<div class="m-5">
-				<p>Skriv in vart du vill sätta ett kryss</p>
-				<input @bind="XtoScoreBoard" class="form-control w-100" placeholder="Vart vill du sätta ett X?" />
-				<button type="button" class="btn btn-dark my-3" @onclick="AddXToScoreboard">Submit</button>
-
+			<div class="col-lg-8 col-md-12 col-sm-8">
+				<div>
+					<h4 class="m-5 text-center">Spelare: @listOfAddedPlayers[indexOfCurrentPlayer].FirstName @listOfAddedPlayers[indexOfCurrentPlayer].LastName</h4>
+				</div>
+				<section>
+					<DiceComponent />
+				</section>
 			</div>
 		</div>
 	</div>
@@ -104,6 +98,7 @@ else
 							else
 							{
 								<p class="scoreboard-list">@score.Item1</p>
+								
 							}
 						}
 					</div>
@@ -134,9 +129,18 @@ else
 
 
 	bool Createplayers = true;
+	bool showChoiceBool = false; 
 
 
 	int indexOfCurrentPlayer = 0;
+
+	private void SaveScore(Protokoll item)
+	{
+
+		item.Submit = true;
+		AddToScoreList();
+		showChoiceBool = false;
+	}
 
 
 	public void NextPlayer()
@@ -196,7 +200,7 @@ else
 				currentStateOfTotalSumma = (currentStateOfTotalSumma.Item1 + item.Points, currentStateOfTotalSumma.Item2);
 				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = currentStateOfTotalSumma;
 
-				if (item.Choice == "Ettor" || item.Choice == "TvÃ¥or" || item.Choice == "Treor" || item.Choice == "Fyror" || item.Choice == "Femmor" || item.Choice == "Sexor")
+				if (item.Choice == "Ettor" || item.Choice == "Tvåor" || item.Choice == "Treor" || item.Choice == "Fyror" || item.Choice == "Femmor" || item.Choice == "Sexor")
 				{
 					var currentStateOfSumma = listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7];
 					currentStateOfSumma = (currentStateOfSumma.Item1 + item.Points, currentStateOfSumma.Item2);
@@ -221,8 +225,9 @@ else
 	{
 		var YatzyCalculator = new CalculatingPoints();
 
-		if (SavedDiceList.Count == 5)
+		if (SavedDiceList.Count == 5 && !showChoiceBool)
 		{
+			showChoiceBool = true;
 			YatzyCalculator.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
 			YatzyCalculator.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
 			YatzyCalculator.TvåPar(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
@@ -233,6 +238,12 @@ else
 			YatzyCalculator.Kåk(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
 			YatzyCalculator.Chans(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
 			YatzyCalculator.Yatzy(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+
+		}
+		else
+		{
+			showChoiceBool = false;
+			protokoll.Clear();
 		}
 	}
 
