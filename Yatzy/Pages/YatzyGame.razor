@@ -12,39 +12,59 @@
 @if (Createplayers)
 {
 	<section>
-		<HeroTitle Title="Create Player" />
-		<p class="inputErrorMessageAddPlayer">@inputErrorMessageAddPlayer</p>
-		<input @bind="firstName" class="form-control w-25" placeholder="Förnamn" />
-		<input @bind="lastName" class="form-control w-25" placeholder="Efternamn" />
-		<button type="button" class="btn btn-dark my-3" @onclick="AddPlayer">Add Player</button>
-		<button type="button" class="btn btn-dark my-3 text" @onclick="RemovePlayer">Remove Player</button>
-		<p>@errorMessageIfWrongPlayer</p>
+		<HeroTitle Title="Create Players" />
+		<div class="d-flex justify-content-center">
+			<div>
+				<p class="inputErrorMessageAddPlayer">@inputErrorMessageAddPlayer</p>
+				<input @bind="firstName" class="form-control w-100" placeholder="Förnamn" />
+				<input @bind="lastName" class="form-control w-100" placeholder="Efternamn" />
+				<button type="button" class="btn btn-dark my-3" @onclick="AddPlayer">Add Player</button>
+				<button type="button" class="btn btn-dark my-3 text" @onclick="RemovePlayer">Remove Player</button>
+				<p>@errorMessageIfWrongPlayer</p>
+			</div>
+		</div>
 	</section>
 }
 else
 {
+	<div>
+		<h4 class="m-5 text-center">Spelare: @listOfAddedPlayers[indexOfCurrentPlayer].FirstName @listOfAddedPlayers[indexOfCurrentPlayer].LastName</h4>
+	</div>
 	<section>
 		<DiceComponent />
 	</section>
+	<div class="d-flex justify-content-center">
+		<div >
+			@if (protokoll.Count > 0)
+			{
+				<div class="d-flex justify-content-center m-5">
+					<button class="btn btn-dark" @onclick="AddToScoreList">Add to Scoreboard</button>
+				</div>
+				foreach (Protokoll item in protokoll)
+				{
+					if (item.Check)
+					{
+						<div class="d-flex justify-content-center">
+							<span>@item.Points</span>
+							<input @bind=item.Submit type="checkbox" name="val" />
+							<label>@item.Choice</label>
+						</div>
+					}
+				}
+			}
+			<div class="d-flex justify-content-evenly m-3">
+				<button class="btn btn-dark" @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
+			</div>
+			<div class="m-5">
+				<p>Skriv in vart du vill sätta ett kryss</p>
+				<input @bind="XtoScoreBoard" class="form-control w-100" placeholder="Vart vill du sätta ett X?" />
+				<button type="button" class="btn btn-dark my-3" @onclick="AddXToScoreboard">Submit</button>
+
+			</div>
+		</div>
+	</div>
 }
 
-<div>
-
-	@foreach (Protokoll item in protokoll)
-	{
-		if (item.Check)
-		{
-			<div class="d-flex justify-content-center">
-				<span>@item.Points</span>
-				<input @bind=item.Submit type="checkbox" name="val" />
-				<label>@item.Choice</label>
-			</div>
-		}
-	}
-	<div class="d-flex justify-content-evenly m-3">
-	</div>
-</div>
-<button @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
 
 <section>
 	<HeroTitle Title="Scoreboard" />
@@ -104,6 +124,7 @@ else
 	string lastName = "";
 	string errorMessageIfWrongPlayer = "";
 	string startOrQuitGame = "Start Game";
+	string XtoScoreBoard = "";
 
 
 	List<Protokoll> protokoll = new();
@@ -118,21 +139,75 @@ else
 	int indexOfCurrentPlayer = 0;
 
 
+	public void NextPlayer()
+	{
+		indexOfCurrentPlayer++;
+		if (indexOfCurrentPlayer >= listOfAddedPlayers.Count)
+		{
+			indexOfCurrentPlayer = 0;
+		}
+	}
+
+	public void AddXToScoreboard()
+	{
+		int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, XtoScoreBoard));
+		if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index].Item1 == 0)
+		{
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (-1, XtoScoreBoard);
+			ClearNGotoNextPlayer();
+			XtoScoreBoard = "";
+		}
+	}
+
+	public void AddToScoreList()
+	{
+		foreach (Protokoll item in protokoll)
+		{
+			if (item.Submit)
+			{
+				int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, item.Choice));
+				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (item.Points, item.Choice);
+
+				var currentStateOfTotalSumma = listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17];
+				currentStateOfTotalSumma = (currentStateOfTotalSumma.Item1 + item.Points, currentStateOfTotalSumma.Item2);
+				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = currentStateOfTotalSumma;
+
+				if (item.Choice == "Ettor" || item.Choice == "Tvåor" || item.Choice == "Treor" || item.Choice == "Fyror" || item.Choice == "Femmor" || item.Choice == "Sexor")
+				{
+					var currentStateOfSumma = listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7];
+					currentStateOfSumma = (currentStateOfSumma.Item1 + item.Points, currentStateOfSumma.Item2);
+					listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7] = currentStateOfSumma;
+				}
+			}
+		}
+		ClearNGotoNextPlayer();
+	}
+
+	public void ClearNGotoNextPlayer()
+	{
+		protokoll.Clear();
+		SavedDiceList.Clear();
+		listOfNumber.Clear();
+		NextPlayer();
+	}
+
 	public void ShowScoreboardChoice()
 	{
 		var YatzyCalculator = new CalculatingPoints();
-		YatzyCalculator.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
-		YatzyCalculator.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
-		YatzyCalculator.TvåPar(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
-		YatzyCalculator.Triss(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
-		YatzyCalculator.Fyrtal(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
-		YatzyCalculator.LitenStege(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
-		YatzyCalculator.StorStege(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
-		YatzyCalculator.Kåk(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
-		YatzyCalculator.Chans(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
-		YatzyCalculator.Yatzy(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
 
-		SavedDiceList.Clear();
+		if (SavedDiceList.Count == 5)
+		{
+			YatzyCalculator.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+			YatzyCalculator.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+			YatzyCalculator.TvåPar(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+			YatzyCalculator.Triss(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+			YatzyCalculator.Fyrtal(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+			YatzyCalculator.LitenStege(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+			YatzyCalculator.StorStege(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
+			YatzyCalculator.Kåk(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+			YatzyCalculator.Chans(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+			YatzyCalculator.Yatzy(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+		}
 	}
 
 	public void AddPlayer()
@@ -171,10 +246,14 @@ else
 
 	public void StartGame()
 	{
-		if (Createplayers)
+		if (Createplayers && listOfAddedPlayers.Count > 0)
 		{
 			Createplayers = false;
 			startOrQuitGame = "Quit Game";
+		}
+		else if (listOfAddedPlayers.Count == 0)
+		{
+			inputErrorMessageAddPlayer = "You have to create a player before you can start the game";
 		}
 		else
 		{
