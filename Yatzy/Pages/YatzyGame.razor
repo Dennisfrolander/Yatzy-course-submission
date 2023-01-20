@@ -1,6 +1,7 @@
 ﻿@page "/yatzy"
 @using Yatzy.Models
 @using YatziMethods
+@using Yatzy.Components
 <h3>Yatzy</h3>
 
 <div class="d-flex justify-content-center">
@@ -11,7 +12,7 @@
 @if (Createplayers)
 {
 	<section>
-		<Yatzy.Components.HeroTitle Title="Create Player" />
+		<HeroTitle Title="Create Player" />
 		<p class="inputErrorMessageAddPlayer">@inputErrorMessageAddPlayer</p>
 		<input @bind="firstName" class="form-control w-25" placeholder="Förnamn" />
 		<input @bind="lastName" class="form-control w-25" placeholder="Efternamn" />
@@ -23,7 +24,7 @@
 else
 {
 	<section>
-		<Yatzy.Components.DiceComponent />
+		<DiceComponent />
 	</section>
 }
 
@@ -46,7 +47,7 @@ else
 <button @onclick="ShowScoreboardChoice">Show Scoreboard Choice</button>
 
 <section>
-	<Yatzy.Components.HeroTitle Title="Scoreboard" />
+	<HeroTitle Title="Scoreboard" />
 	@if (listOfAddedPlayers.Count > 0)
 	{
 		<div class="container scoreboard-list-container">
@@ -123,6 +124,7 @@ else
 		YatzyCalculator.EttTillSex(SavedDiceList, Player.ScoreBoardPoints, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
 		YatzyCalculator.Par(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll, listOfNumber);
 		YatzyCalculator.TvåPar(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
+		YatzyCalculator.Triss(SavedDiceList, listOfAddedPlayers, indexOfCurrentPlayer, protokoll);
 
 		SavedDiceList.Clear();
 	}
