@@ -80,3 +80,10 @@ table {
     cursor: pointer;
     background:  #1d1c1c;
 }
+
+.scoreboard-list-slash {
+    margin-left: 10%;
+    background: grey;
+    padding: 0 10px 0 10px;
+    color: white;
+}
