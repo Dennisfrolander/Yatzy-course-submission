@@ -5,7 +5,7 @@
 		public string FirstName { get; set; } = "";
 		public string LastName { get; set; } = "";
 		public int AntalKast { get; set; }
-		public List<dynamic> playerScore { get; set; }
+		public List<(int, string)> playerScore { get; set; }
 
 		private static readonly List<string> list = new()
 		{
@@ -35,7 +35,7 @@
 			FirstName = firstName;
 			LastName = lastName;
 			AntalKast = 3;
-			playerScore = new List<dynamic>()
+			playerScore = new List<(int, string)>()
 			{
 			(0,"Ettor"),
 			(0,"Tvåor"),

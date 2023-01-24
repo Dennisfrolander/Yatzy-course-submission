@@ -31,6 +31,7 @@ table {
     border: 0.5px solid grey;
     margin: 0;
     padding: 8px;
+    position: relative;
 }
 
 .scoreboard-list-points {
@@ -45,4 +46,59 @@ table {
     background: lightgrey;
     font-style: italic;
     font-weight: 900;
+}
+
+.game-container {
+    max-width: 900px;
+    margin: auto;
+    border: solid 2px black;
+    padding: 5%;
+    margin-top: 30px;
+    border-radius: 10%;
+
+}
+
+.scoreBoardChoiceButton {
+    border: solid 1px black;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: black;
+    border-radius: 5%;
+    padding: 0;
+}
+
+.scoreBoardChoiceButton-paragraph {
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    color: white;
+    display: inline;
+}
+
+.scoreBoardChoiceButton:hover{
+    cursor: pointer;
+    background:  #1d1c1c;
+}
+
+.scoreboard-list-slash {
+    background: #c63f3f;
+    padding: 0 10px 0 10px;
+    color: white;
+    position: absolute;
+    left: 15%;
+}
+
+.scoreboard-list-addpoints {
+    padding: 3px 9px 3.5px 9px;
+    background: lightgreen;
+}
+
+.scoreboard-list-slash:hover {
+    cursor: pointer;
+}
+
+.scoreboard-list-addpoints:hover {
+    cursor: pointer;
 }
