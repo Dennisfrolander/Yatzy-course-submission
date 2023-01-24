@@ -29,30 +29,13 @@ else
 {
 	<div class="container game-container">
 		<div class="row">
-			<div class="col-lg-2 col-md-12 col-sm-8">
-				<div class="d-flex justify-content-center m-3">
-					<button class="btn btn-dark" @onclick="ShowScoreboardChoice">Alternatives</button>
-				</div>
-				@if (protokoll.Count > 0 && showChoiceBool)
-				{
-					foreach (Protokoll item in protokoll)
-					{
-						if (item.Check)
-						{
-							<div class="scoreBoardChoiceButton" @onclick="(() =>SaveScore(item))">
-								<p class="scoreBoardChoiceButton-paragraph">@item.Choice</p>
-								<p class="scoreBoardChoiceButton-paragraph">@item.Points p</p>
-							</div>
-						}
-					}
-				}
-			</div>
-			<div class="col-lg-8 col-md-12 col-sm-8">
+			<div class="col-lg-12 col-md-12 col-sm-8">
 				<div>
 					<h4 class="m-5 text-center">Spelare: @listOfAddedPlayers[indexOfCurrentPlayer].FirstName @listOfAddedPlayers[indexOfCurrentPlayer].LastName</h4>
+					<h5 class="m-5 text-center">Spelare: Antal kast kvar: @throws</h5>
 				</div>
 				<section>
-					<DiceComponent />
+					<DiceComponent throws="throws" PlayerThrows="PlayerThrows" AddToScoreBoardList="ShowScoreboardChoice" ResetDice="ResetDice" />
 				</section>
 			</div>
 		</div>
@@ -84,29 +67,75 @@ else
 						}
 					}
 				</div>
+				@*Kommentera denna raden*@
 				@foreach (Player player in listOfAddedPlayers)
 				{
 					<div class="col p-0">
 						<p class="scoreboard-list scoreboard-list-players">@player.FirstName @player.LastName[0]</p>
 
+
 						@foreach ((int, string) score in player.playerScore)
 						{
-							if (score.Item1 == -1)
+
+							if (SavedDiceList.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item1 != -1)
+							{
+								int counter = 0;
+								foreach (Protokoll item in protokoll)
+								{
+									if (score.Item2 == item.Choice)
+									{
+										if (score.Item1 == 0 && item.Check)
+										{
+
+											<div class="scoreboard-list">
+												<span @onclick="(() =>SaveScore(item))" class="scoreboard-list-addpoints">@item.Points</span>
+												@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0)
+												{
+													<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
+												}
+											</div>
+										}
+									}
+									else if (score.Item1 > 0)
+									{
+										<p class="scoreboard-list">@score.Item1</p>
+										break;
+									}
+									else
+									{
+										counter++;
+									}
+								}
+								if (counter == protokoll.Count)
+								{
+									<div class="scoreboard-list">
+										<span>-</span>
+										@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0)
+										{
+											<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
+										}
+									</div>
+
+								}
+
+							}
+							else if (score.Item1 == -1)
 							{
 								<p class="scoreboard-list scoreboard-list-struken text-center">X</p>
+							}
+							else if (score.Item1 > 0)
+							{
+								<p class="scoreboard-list">@score.Item1</p>
 							}
 							else
 							{
 								<div class="scoreboard-list">
-									
-								<span>@score.Item1</span>
+									<span>-</span>
 									@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0)
-								{
-									<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
-								}
-
+									{
+										<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
+									}
 								</div>
-								
 							}
 						}
 					</div>
@@ -137,10 +166,23 @@ else
 
 
 	bool Createplayers = true;
-	bool showChoiceBool = false; 
+	bool showChoiceBool = false;
+	bool ResetDice = false;
 
 
 	int indexOfCurrentPlayer = 0;
+	int throws = 3;
+
+
+
+
+	private void PlayerThrows()
+	{
+		if(throws > 0)
+		{
+			throws--;
+		}
+	}
 
 	private void AddSlashToScoreboard((int, string) score)
 	{
@@ -152,7 +194,7 @@ else
 		}
 		else
 		{
-			
+
 		}
 	}
 
@@ -162,15 +204,18 @@ else
 		item.Submit = true;
 		AddToScoreList();
 		showChoiceBool = false;
+		ResetDice = true;
 	}
 
 
 	public void NextPlayer()
 	{
 		indexOfCurrentPlayer++;
+		throws = 3;
 		if (indexOfCurrentPlayer >= listOfAddedPlayers.Count)
 		{
 			indexOfCurrentPlayer = 0;
+			throws = 3;
 		}
 	}
 
@@ -204,9 +249,9 @@ else
 		}
 		if (bonusPoints >= 63 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item1 == 0)
 		{
-				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6] = (50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item2);
-				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7] = (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item1 + 50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item2);
-				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item1 + 50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item2);
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6] = (50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item2);
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7] = (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item1 + 50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item2);
+			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item1 + 50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item2);
 		}
 	}
 	public void AddToScoreList()
@@ -321,3 +366,4 @@ else
 		}
 	}
 }
+

@@ -47,6 +47,11 @@
 				<p class="text-center">@die.SaveRoll</p>
 			</div>
 		}
+		else if(ResetDice)
+		{
+			<p>Press the button to roll the dice</p>
+			break;
+		}
 		else
 		{
 			<p>Press the button to roll the dice</p>
@@ -67,13 +72,44 @@
 	new Dice(),
 	new Dice(),
 };
+
+	[Parameter]
+	public EventCallback PlayerThrows { get; set; }
+
+
+	[Parameter]
+	public EventCallback AddToScoreBoardList { get; set; }
+
+	[Parameter]
+	public int throws { get; set; }
+
+	[Parameter]
+	public bool ResetDice { get; set; }
+
+
+
 	private void RollDice()
 	{
 		for (int i = 0; i < dice.Count; i++)
-			if (dice[i].currentRollBool == false)
+			if (dice[i].currentRollBool == false && throws > 1)
 			{
 				dice[i].RollDice();
+				
 			}
+			else if(throws == 1)
+			{
+
+				if(dice[i].currentRollBool == false)
+				{
+					dice[i].RollDice();
+					SavedDiceList.Add(dice[i].currentRoll);
+					dice[i].currentRollBool = true;
+					dice[i].SaveRoll = "Saved";
+				}
+
+			}
+		AddToScoreBoardList.InvokeAsync();
+		PlayerThrows.InvokeAsync();
 	}
 	private void SaveDice(Dice die)
 	{
@@ -82,12 +118,14 @@
 			SavedDiceList.Add(die.currentRoll);
 			die.currentRollBool = true;
 			die.SaveRoll = "Saved";
+			AddToScoreBoardList.InvokeAsync();
 		}
 		else if (die.currentRollBool)
 		{
 			SavedDiceList.Remove(die.currentRoll);
 			die.currentRollBool = false;
 			die.SaveRoll = "";
+			AddToScoreBoardList.InvokeAsync();
 		}
 
 	}
