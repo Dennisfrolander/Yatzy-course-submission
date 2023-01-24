@@ -47,11 +47,6 @@
 				<p class="text-center">@die.SaveRoll</p>
 			</div>
 		}
-		else if(ResetDice)
-		{
-			<p>Press the button to roll the dice</p>
-			break;
-		}
 		else
 		{
 			<p>Press the button to roll the dice</p>
@@ -59,9 +54,17 @@
 		}
 	}
 </div>
-<div class="d-flex justify-content-center m-0">
+@if(throws > 0)
+{
+	<div class="d-flex justify-content-center m-0">
 	<button class="btn btn-dark p-4" @onclick="RollDice">Roll</button>
-</div>
+	</div>
+}
+else
+{
+	<p>Put your score in the scoreboard</p>
+}
+
 @code {
 	List<int> SavedDiceList = SavedDice.SavedDiceList;
 	public List<Dice> dice = new List<Dice>()
@@ -86,8 +89,16 @@
 	[Parameter]
 	public bool ResetDice { get; set; }
 
-
-
+	public void RefreshMe()
+	{
+		foreach(Dice die in dice)
+		{
+				die.currentRollBool = false;
+				die.SaveRoll = "";
+				die.currentRoll = 0;
+		}
+		StateHasChanged();
+	}
 	private void RollDice()
 	{
 		for (int i = 0; i < dice.Count; i++)

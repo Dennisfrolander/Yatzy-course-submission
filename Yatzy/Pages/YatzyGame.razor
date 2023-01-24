@@ -35,7 +35,7 @@ else
 					<h5 class="m-5 text-center">Spelare: Antal kast kvar: @throws</h5>
 				</div>
 				<section>
-					<DiceComponent throws="throws" PlayerThrows="PlayerThrows" AddToScoreBoardList="ShowScoreboardChoice" ResetDice="ResetDice" />
+					<DiceComponent throws="throws" PlayerThrows="PlayerThrows" AddToScoreBoardList="ShowScoreboardChoice" @ref="ChildComponent"/>
 				</section>
 			</div>
 		</div>
@@ -167,14 +167,17 @@ else
 
 	bool Createplayers = true;
 	bool showChoiceBool = false;
-	bool ResetDice = false;
-
-
 	int indexOfCurrentPlayer = 0;
 	int throws = 3;
 
+	protected Components.DiceComponent? ChildComponent;
 
 
+    private void Change()
+    {
+		
+		ChildComponent?.RefreshMe();
+	}
 
 	private void PlayerThrows()
 	{
@@ -190,11 +193,8 @@ else
 		if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index].Item1 == 0)
 		{
 			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (-1, score.Item2);
+			Change();
 			ClearNGotoNextPlayer();
-		}
-		else
-		{
-
 		}
 	}
 
@@ -204,7 +204,7 @@ else
 		item.Submit = true;
 		AddToScoreList();
 		showChoiceBool = false;
-		ResetDice = true;
+		Change();
 	}
 
 
