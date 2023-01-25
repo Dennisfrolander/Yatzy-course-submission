@@ -51,7 +51,6 @@ table {
 .game-container {
     max-width: 900px;
     margin: auto;
-    border: solid 2px black;
     padding: 5%;
     margin-top: 30px;
     border-radius: 10%;
@@ -87,7 +86,7 @@ table {
     padding: 0 10px 0 10px;
     color: white;
     position: absolute;
-    left: 15%;
+    right: 5%;
 }
 
 .scoreboard-list-addpoints {
