@@ -67,19 +67,29 @@ else
 						}
 					}
 				</div>
-				@*Kommentera denna raden*@
+				@*Loopar genom varje spelare i listan, för varje spelare skapas en ny kolumn*@
 				@foreach (Player player in listOfAddedPlayers)
 				{
 					<div class="col p-0">
 						<p class="scoreboard-list scoreboard-list-players">@player.FirstName @player.LastName[0]</p>
 
-
+						@*Loopar genom varje poäng i spelarens poänglista, 
+							*Om 5 tärningar i sparade går den in i första if-satsen
+							*Om poängScore är -1 så skrivs ett X ut
+							*Om poängScore är större än 0 så skriva den aktiva spelarens poäng ut
+							*Om inget av de övre stämmer skrivs - ut och en knapp med metoden "AddSlashToScoreboard" 
+							
+						*@
 						@foreach ((int, string) score in player.playerScore)
 						{
 
 							if (SavedDiceList.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item1 != -1)
 							{
 								int counter = 0;
+								@*Loopar genom protokoll, om protokollets string stämmer överrens med spelarens poäng string 
+									så får spelarens möjlighet att lägga till protokollets poäng till spelarens poäng
+									eller möjligheten att stryka sina poäng med metoden "AddSlashToScoreboard". 
+								*@
 								foreach (Protokoll item in protokoll)
 								{
 									if (score.Item2 == item.Choice)
@@ -170,12 +180,13 @@ else
 	int indexOfCurrentPlayer = 0;
 	int throws = 3;
 
+
+	//Metoden hämtar RefreshMe metoden från diceComponent.
+	//RefreshMe renderar om DiceComponent 
 	protected Components.DiceComponent? ChildComponent;
+	private void Change()
+	{
 
-
-    private void Change()
-    {
-		
 		ChildComponent?.RefreshMe();
 	}
 
@@ -331,20 +342,27 @@ else
 
 	public void RemovePlayer()
 	{
-		var playersCopy = listOfAddedPlayers.ToList();
-
-		foreach (var player in playersCopy)
+		try
 		{
+			var playersCopy = listOfAddedPlayers.ToList();
 
-			if (player.FirstName == firstName && player.LastName == lastName)
+			foreach (var player in playersCopy)
 			{
-				errorMessageIfWrongPlayer = $"Player {player.FirstName} {player.LastName} has been removed from scoreboard";
-				listOfAddedPlayers.Remove(player);
+
+				if (player.FirstName == firstName && player.LastName == lastName)
+				{
+					errorMessageIfWrongPlayer = $"Player {player.FirstName} {player.LastName} has been removed from scoreboard";
+					listOfAddedPlayers.Remove(player);
+				}
+				else
+				{
+					errorMessageIfWrongPlayer = $"Player does not exist";
+				}
 			}
-			else
-			{
-				errorMessageIfWrongPlayer = $"Player does not exist";
-			}
+		}
+		catch
+		{
+			errorMessageIfWrongPlayer = $"Something went wrong";
 		}
 	}
 

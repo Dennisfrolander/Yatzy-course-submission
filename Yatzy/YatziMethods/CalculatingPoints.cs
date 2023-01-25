@@ -3,7 +3,8 @@ namespace Yatzy.YatziMethods
 { 
 	public class CalculatingPoints
 	{
-
+		/*Tar fram alla enskilda nummer sedan jämför antalet av varje enskilt nummer och multiplicerar numret med antal och
+		om den aktiva spelarens poäng är 0. Läggs poängen in i protokoll*/
 		public void EttTillSex(List<int> savedDiceList, List<string> scoreboardPointName, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll, List<int> listOfNumber)
 		{
 			for (int i = 0; i < 5; i++)
@@ -40,6 +41,8 @@ namespace Yatzy.YatziMethods
 			}
 			listOfNumber.Clear();
 		}
+		/* Kontrollerar ifall det finns två av samma tal, om det är fallet läggs talet in i en ny lista. 
+		 Om den aktiva spelarens Par poäng är 0 så läggs den största siffran multiplicerat med 2 från den nya listan in i protokollet*/
 		public void Par(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll, List<int> listOfNumber)
 		{
 			for (int i = 0; i < 5; i++)
@@ -63,7 +66,9 @@ namespace Yatzy.YatziMethods
 			}
 			listOfNumber.Clear();
 		}
-
+		/* Likt par funktionen kontrollrar den ifall det finns fler av samma tal, om det finns 4 eller fler av samma tal
+		 * så multiplceras det talet med 4 och läggs in i protokollet, ifall det finns 2 eller 3 av samma tal
+		 blir paircheck true och då letar funktionen efter ännu ett par som inte är av samma värde som det första. */ 
 		public void TvåPar(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			int firstPairValue = 0;
@@ -124,7 +129,8 @@ namespace Yatzy.YatziMethods
 				}
 			}
 		}
-
+		/* Kontrollerar ifall det finns 3 eller fler av samma tal, 
+		 * ifall det finns så multipliceras talet med 3 och läggs in i protokollet om den aktiva spelarens poäng är 0*/ 
 		public void Triss(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			for (int i = 0; i < 5; i++)
@@ -144,7 +150,8 @@ namespace Yatzy.YatziMethods
 				}
 			}
 		}
-
+		/* Kontrollerar ifall det finns 4 eller fler av samma tal, 
+		 * ifall det finns så multipliceras talet med 4 och läggs in i protokollet om den aktiva spelarens poäng är 0*/
 		public void Fyrtal(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			for (int i = 0; i < 5; i++)
@@ -164,7 +171,8 @@ namespace Yatzy.YatziMethods
 				}
 			}
 		}
-
+		/* Kontrollerar att alla tal är av olika värden, ifall alla tal är olika och total summan blir 15 så läggs det 
+		 in i protokollet om den aktiva spelares poäng är 0*/ 
 		public void LitenStege(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll, List<int> listOfNumber)
 		{
 			int points = 0;
@@ -183,7 +191,8 @@ namespace Yatzy.YatziMethods
 			listOfNumber.Clear();
 		}
 
-
+		/* Kontrollerar att alla tal är av olika värden, ifall alla tal är olika och total summan blir 20 så läggs det 
+		 in i protokollet om den aktiva spelares poäng är 0*/
 		public void StorStege(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll, List<int> listOfNumber)
 		{
 			int points = 0;
@@ -201,7 +210,10 @@ namespace Yatzy.YatziMethods
 			}
 			listOfNumber.Clear();
 		}
-
+		/* Kontrollerar ifall det finns 3 tal med samma värde, om det finns så sparas den siffran och blir fullHouse true och då letar den efter 
+		 ett par som inte är av samma värde som den sparade siffran. Om det hittas ett par så multiplicerars siffran 
+		 från trissen med 3, och sedan adderas med paret.
+		 Då läggs det in i protokollet om den aktiva spelarens poäng är 0. */
 		public void Kåk(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			bool fullHouse = false;
@@ -245,7 +257,7 @@ namespace Yatzy.YatziMethods
 				}
 			}
 		}
-
+		/* Adderar alla tal med varandra och om den aktiva spelarens poäng är 0, så läggs totalsumman in i protokollet*/
 		public void Chans(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 			int points = 0;
@@ -258,7 +270,7 @@ namespace Yatzy.YatziMethods
 				protokoll.Add(new Protokoll(points, "Chans", true, false));
 			}
 		}
-
+		/* Kontrollerar ifall alla nummer är av samma värde, om den aktiva spelarens poäng är 0 så läggs 50 poäng in i protokollet*/ 
 		public void Yatzy(List<int> savedDiceList, List<Player> listOfAddedPlayers, int indexOfCurrentPlayer, List<Protokoll> protokoll)
 		{
 
