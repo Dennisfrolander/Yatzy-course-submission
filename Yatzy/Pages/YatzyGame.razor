@@ -96,7 +96,7 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 									@foreach ((int, string) score in player.playerScore)
 									{
 
-										if (SavedDiceList.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item1 != -1 && protokoll.Count > 0)
+										if (SavedDiceList.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item1 != -1 && protokoll.Count > 0)
 										{
 											int counter = 0;
 											@*Loopar genom protokoll, om protokollets string stämmer överrens med spelarens poäng string
@@ -112,7 +112,7 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 
 														<div class="scoreboard-list">
 															<span @onclick="(() =>SaveScore(item))" class="scoreboard-list-addpoints">@item.Points</span>
-															@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
+															@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
 															{
 																<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
 															}
@@ -133,7 +133,7 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 											{
 												<div class="scoreboard-list">
 													<span>-</span>
-													@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
+													@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
 													{
 														<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
 													}
@@ -154,7 +154,7 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 										{
 											<div class="scoreboard-list">
 												<span>-</span>
-												@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
+												@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
 												{
 													<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
 												}
@@ -389,10 +389,17 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 	{
 		if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
 		{
-			listOfAddedPlayers.Add(new Player(firstName, lastName));
-			firstName = "";
-			lastName = "";
-			inputErrorMessageAddPlayer = "";
+			if (listOfAddedPlayers.Any(n => n.FirstName == firstName && n.LastName == lastName))
+			{
+				inputErrorMessageAddPlayer = "Player already exists";
+			}
+			else
+			{
+				listOfAddedPlayers.Add(new Player(firstName, lastName));
+				firstName = "";
+				lastName = "";
+				inputErrorMessageAddPlayer = "";
+			}
 		}
 		else
 		{
