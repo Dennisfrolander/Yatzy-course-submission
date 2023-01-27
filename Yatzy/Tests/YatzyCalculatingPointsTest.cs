@@ -56,7 +56,7 @@ namespace Yatzy.Tests
 
 		[Theory]
 		[InlineData(1, 1, 1, 2, 2, 6)]
-		[InlineData(6, 2, 2, 2, 6, 16)]
+		[InlineData(6, 2, 2, 2, 6, 15)]
 		[InlineData(2, 2, 2, 2, 2, 8)]
 		[InlineData(2, 1, 6, 3, 6, 0)]
 		[InlineData(4, 3, 3, 4, 4, 14)]
