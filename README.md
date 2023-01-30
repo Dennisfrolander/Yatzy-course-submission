@@ -18,7 +18,7 @@
 
 
 
-<p  align="center">3. Varje spelare har 3 kast, när spelaren har kastat alla sin kast eller sparat 5 stycken tärningar så kommer alternativ upp på vilka poäng du kan få i scoreboard. </p>
+<p  align="center">3. Varje spelare har 3 kast, när spelaren har kastat alla sin kast eller sparat 5 stycken tärningar så kommer alternativ upp på vilka poäng du kan få i scoreboard, du trycker på den gröna knappen för att lägga till poängen på den platsen du önskar. </p>
 <p  align="center">Om spelaren inte vill eller kan lägga till poäng så kan du trycka på "/" för att kryssa valfritt poäng. </p>
 
 <div  align="center">
