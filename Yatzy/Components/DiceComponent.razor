@@ -89,6 +89,7 @@ else
 	[Parameter]
 	public bool ResetDice { get; set; }
 
+	string errorMessage = "";
 	/// <summary>
 	/// Method <c>RefreshMe</c> - Reset varje tärning i dicelistan och renderar om DiceComponent.
 	/// </summary>
@@ -96,34 +97,37 @@ else
 	{
 		foreach(Dice die in dice)
 		{
-				die.currentRollBool = false;
-				die.SaveRoll = "";
-				die.currentRoll = 0;
+			die.currentRollBool = false;
+			die.SaveRoll = "";
+			die.currentRoll = 0;
 		}
 		StateHasChanged();
 	}
 	private void RollDice()
 	{
-		for (int i = 0; i < dice.Count; i++)
-			if (dice[i].currentRollBool == false && throws > 1)
-			{
-				dice[i].RollDice();
-				
-			}
-			else if(throws == 1)
-			{
-
-				if(dice[i].currentRollBool == false)
+		if(SavedDiceList.Count != 5)
+		{
+			for (int i = 0; i < dice.Count; i++)
+				if (dice[i].currentRollBool == false && throws > 1)
 				{
 					dice[i].RollDice();
-					SavedDiceList.Add(dice[i].currentRoll);
-					dice[i].currentRollBool = true;
-					dice[i].SaveRoll = "Saved";
-				}
 
-			}
-		AddToScoreBoardList.InvokeAsync();
-		PlayerThrows.InvokeAsync();
+				}
+				else if(throws == 1)
+				{
+
+					if(dice[i].currentRollBool == false)
+					{
+						dice[i].RollDice();
+						SavedDiceList.Add(dice[i].currentRoll);
+						dice[i].currentRollBool = true;
+						dice[i].SaveRoll = "Saved";
+					}
+
+				}
+			AddToScoreBoardList.InvokeAsync();
+			PlayerThrows.InvokeAsync();
+		}
 	}
 	private void SaveDice(Dice die)
 	{
