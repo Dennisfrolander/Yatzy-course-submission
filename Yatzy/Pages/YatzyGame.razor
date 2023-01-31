@@ -57,115 +57,13 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 				</div>
 			</div>
 			<div class="col-lg-8 col-md-12 col-sm-12">
-				<HeroTitle Title="Scoreboard" />
-				@if (listOfAddedPlayers.Count > 0)
-				{
-					<div class="container scoreboard-list-container">
-						<div class="row">
-							<div class="col p-0">
-								<p class="scoreboard-list scoreboard-list-players scoreboard-list-background">Players:</p>
-								@foreach (var pointName in Player.ScoreBoardPoints)
-								{
-									if (pointName == "Summa")
-									{
-										<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@pointName:</p>
-									}
-									else if (pointName == "Total summa")
-									{
-										<p class="scoreboard-list scoreboard-list-points scoreboard-list-background">@pointName:</p>
-									}
-									else
-									{
-										<p class="scoreboard-list scoreboard-list-points">@pointName:</p>
-									}
-								}
-							</div>
-
-							@*Loopar genom varje spelare i listan, för varje spelare skapas en ny kolumn*@
-							@foreach (Player player in listOfAddedPlayers)
-							{
-								<div class="col p-0">
-									<p class="scoreboard-list scoreboard-list-players">@player.FirstName @player.LastName[0]</p>
-
-									@*Loopar genom varje poäng i spelarens poänglista,
-						*Om 5 tärningar i sparade går den in i första if-satsen
-						*Om poängScore är -1 så skrivs ett X ut
-						*Om poängScore är större än 0 så skriva den aktiva spelarens poäng ut
-						*Om inget av de övre stämmer skrivs - ut och en knapp med metoden "AddSlashToScoreboard"*@
-
-									@foreach ((int, string) score in player.playerScore)
-									{
-
-										if (SavedDiceList.Count == 5 && listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item1 != -1 && protokoll.Count > 0)
-										{
-											int counter = 0;
-											@*Loopar genom protokoll, om protokollets string stämmer överrens med spelarens poäng string
-						så får spelarens möjlighet att lägga till protokollets poäng till spelarens poäng
-						eller möjligheten att stryka sina poäng med metoden "AddSlashToScoreboard".*@
-
-											foreach (Protokoll item in protokoll)
-											{
-												if (score.Item2 == item.Choice)
-												{
-													if (score.Item1 == 0 && item.Check)
-													{
-
-														<div class="scoreboard-list">
-															<span @onclick="(() =>SaveScore(item))" class="scoreboard-list-addpoints">@item.Points</span>
-															@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
-															{
-																<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
-															}
-														</div>
-													}
-												}
-												else if (score.Item1 > 0)
-												{
-													<p class="scoreboard-list">@score.Item1</p>
-													break;
-												}
-												else
-												{
-													counter++;
-												}
-											}
-											if (counter == protokoll.Count)
-											{
-												<div class="scoreboard-list">
-													<span>-</span>
-													@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
-													{
-														<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
-													}
-												</div>
-
-											}
-
-										}
-										else if (score.Item1 == -1)
-										{
-											<p class="scoreboard-list scoreboard-list-struken text-center">X</p>
-										}
-										else if (score.Item1 > 0)
-										{
-											<p class="scoreboard-list">@score.Item1</p>
-										}
-										else
-										{
-											<div class="scoreboard-list">
-												<span>-</span>
-												@if (listOfAddedPlayers[indexOfCurrentPlayer].FirstName == player.FirstName && listOfAddedPlayers[indexOfCurrentPlayer].LastName == player.LastName && score.Item2 != "Summa" && score.Item2 != "Total summa" && score.Item1 == 0 && score.Item2 != "Bonus(63)")
-												{
-													<span class="scoreboard-list-slash" @onclick="(() =>AddSlashToScoreboard(score))">/</span>
-												}
-											</div>
-										}
-									}
-								</div>
-							}
-						</div>
-					</div>
-				}
+			<Scoreboard ClearNGotoNextPlayer="ClearNGotoNextPlayer"
+					Change="Change"
+					listOfAddedPlayers="listOfAddedPlayers"
+					SavedDiceList="SavedDiceList"
+					indexOfCurrentPlayer="indexOfCurrentPlayer"
+					protokoll="protokoll"
+					showChoiceBool="showChoiceBool" />
 			</div>
 		</div>
 
@@ -258,25 +156,9 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 		}
 	}
 
-	private void AddSlashToScoreboard((int, string) score)
-	{
-		int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, score.Item2));
-		if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index].Item1 == 0)
-		{
-			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (-1, score.Item2);
-			Change();
-			ClearNGotoNextPlayer();
-		}
-	}
 
-	private void SaveScore(Protokoll item)
-	{
 
-		item.Submit = true;
-		AddToScoreList();
-		showChoiceBool = false;
-		Change();
-	}
+
 
 
 	public void NextPlayer()
@@ -288,67 +170,6 @@ else if (!Createplayers && finishedGame < listOfAddedPlayers.Count)
 			indexOfCurrentPlayer = 0;
 			throws = 3;
 		}
-	}
-
-	public void AddXToScoreboard()
-	{
-		try
-		{
-			int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, (char.ToUpper(XtoScoreBoard[0]) + XtoScoreBoard.Substring(1))));
-			if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index].Item1 == 0)
-			{
-				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (-1, XtoScoreBoard);
-				ClearNGotoNextPlayer();
-				XtoScoreBoard = "";
-			}
-		}
-		catch
-		{
-
-		}
-	}
-
-	public void bonusCounter()
-	{
-		int bonusPoints = 0;
-		for (int i = 0; i < 6; i++)
-		{
-			if (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[i].Item1 != 0 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[i].Item1 != -1)
-			{
-				bonusPoints += listOfAddedPlayers[indexOfCurrentPlayer].playerScore[i].Item1;
-			}
-		}
-		if (bonusPoints >= 63 && listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item1 == 0)
-		{
-			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6] = (50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[6].Item2);
-			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7] = (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item1 + 50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7].Item2);
-			listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = (listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item1 + 50, listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17].Item2);
-		}
-	}
-	public void AddToScoreList()
-	{
-		foreach (Protokoll item in protokoll)
-		{
-			if (item.Submit)
-			{
-				int index = listOfAddedPlayers[indexOfCurrentPlayer].playerScore.IndexOf((0, item.Choice));
-				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[index] = (item.Points, item.Choice);
-
-				var currentStateOfTotalSumma = listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17];
-				currentStateOfTotalSumma = (currentStateOfTotalSumma.Item1 + item.Points, currentStateOfTotalSumma.Item2);
-				listOfAddedPlayers[indexOfCurrentPlayer].playerScore[17] = currentStateOfTotalSumma;
-
-				if (item.Choice == "Ettor" || item.Choice == "Tvåor" || item.Choice == "Treor" || item.Choice == "Fyror" || item.Choice == "Femmor" || item.Choice == "Sexor")
-				{
-					var currentStateOfSumma = listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7];
-					currentStateOfSumma = (currentStateOfSumma.Item1 + item.Points, currentStateOfSumma.Item2);
-					listOfAddedPlayers[indexOfCurrentPlayer].playerScore[7] = currentStateOfSumma;
-
-				}
-			}
-		}
-		ClearNGotoNextPlayer();
-		bonusCounter();
 	}
 
 	public void ClearNGotoNextPlayer()
